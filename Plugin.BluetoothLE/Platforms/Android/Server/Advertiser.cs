@@ -27,14 +27,15 @@ namespace Plugin.BluetoothLE.Server
                 .SetConnectable(true);
 
             var data = new AdvertiseData.Builder()
-                .SetIncludeDeviceName(true)
-                .SetIncludeTxPowerLevel(true);
+                .SetIncludeDeviceName(false)
+                .SetIncludeTxPowerLevel(false);
 
             if (adData.ManufacturerData != null)
                 data.AddManufacturerData(adData.ManufacturerData.CompanyId, adData.ManufacturerData.Data);
+            var data2 = new AdvertiseData.Builder();
 
             foreach (var serviceUuid in adData.ServiceUuids)
-                data.AddServiceUuid(serviceUuid.ToParcelUuid());
+                data2.AddServiceUuid(serviceUuid.ToParcelUuid());
 
             this.manager
                 .Adapter
@@ -42,6 +43,7 @@ namespace Plugin.BluetoothLE.Server
                 .StartAdvertising(
                     settings.Build(),
                     data.Build(),
+                    data2.Build(),
                     this.adCallbacks
                 );
 
